@@ -9,7 +9,11 @@ from langchain_core.runnables import RunnablePassthrough
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
+load_dotenv(dotenv_path=os.path.join(os.path.dirname(os.path.abspath(__file__)), ".env"))
+
+# Resolve FAISS index path relative to this file (project root)
+_ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+FAISS_INDEX_PATH = os.path.join(_ROOT_DIR, "faiss_index")
 
 def load_rag_chain():
     embeddings = HuggingFaceEmbeddings(
@@ -17,7 +21,7 @@ def load_rag_chain():
         model_kwargs={"device": "cpu"}
     )
     vector_store = FAISS.load_local(
-        "faiss_index",
+        FAISS_INDEX_PATH,
         embeddings,
         allow_dangerous_deserialization=True
     )
@@ -58,22 +62,55 @@ Answer:""")
     return rag_chain, retriever
 
 
-def get_answer(question, rag_chain, retriever):
-    answer = rag_chain.invoke(question)
+def get_answer(question, rag_chain, retriever, user_context=None):
+    search_query = f"User Context: {user_context}\nQuestion: {question}" if user_context else question
+    answer = rag_chain.invoke(search_query)
 
-    source_docs = retriever.invoke(question)
+    source_docs = retriever.invoke(search_query)
     sources = []
     for doc in source_docs:
-        source = os.path.basename(doc.metadata.get("source", "Unknown"))
-        if source not in sources:
-            sources.append(source)
+        source_title = os.path.basename(doc.metadata.get("source", "Unknown"))
+        # Avoid duplicate sources
+        if not any(s["title"] == source_title for s in sources):
+            sources.append({
+                "title": source_title,
+                "content": doc.page_content[:200],  # First 200 chars as preview
+                "metadata": doc.metadata
+            })
 
     return {
         "question": question,
         "answer": answer,
-        "sources": sources
+        "sources": sources,
+        "confidence": 0.85,  # Placeholder confidence score
+        "context_used": user_context
     }
 
+def get_plain_answer(question, user_context=None):
+    """
+    Queries the LLM directly without any RAG context.
+    Used for comparison to show the value of the RAG system.
+    """
+    llm = ChatGroq(
+        model="llama-3.3-70b-versatile",
+        api_key=os.getenv("GROQ_API_KEY"),
+        temperature=0.7 # slightly higher for plain generation
+    )
+    
+    prompt = PromptTemplate.from_template("""You are an AI assistant. Answer the following question to the best of your general knowledge.
+    
+User Context: {user_context}
+Question: {question}
+    
+Answer:""")
+    
+    chain = prompt | llm | StrOutputParser()
+    answer = chain.invoke({"question": question, "user_context": user_context or "None"})
+    
+    return {
+        "question": question,
+        "answer": answer
+    }
 
 if __name__ == "__main__":
     print("Loading RAG system...")
@@ -90,7 +127,7 @@ if __name__ == "__main__":
 
     for q in test_questions:
         print(f"Q: {q}")
-        result = get_answer(q, chain, retriever)
+        result = get_answer(q, chain, retriever, user_context="Wet Zone, Yala Season")
         print(f"A: {result['answer']}")
         print(f"Sources: {result['sources']}")
         print("-" * 50)
