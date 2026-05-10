@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  # FastAPI Backend
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: coconut_advisory_backend
+    ports:
+      - "8000:8000"
+    environment:
+      - API_HOST=0.0.0.0
+      - API_PORT=8000
+      - DEBUG=False
+      - GROQ_API_KEY=${GROQ_API_KEY}
+      - KNOWLEDGE_BASE_DIR=/app/knowledge_base
+      - FAISS_INDEX_DIR=/app/faiss_index
+    volumes:
+      - ./knowledge_base:/app/knowledge_base:ro
+      - ./faiss_index:/app/faiss_index:ro
+    networks:
+      - coconut_network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Optional: Nginx reverse proxy
+  nginx:
+    image: nginx:latest
+    container_name: coconut_advisory_nginx
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+    networks:
+      - coconut_network
+
+networks:
+  coconut_network:
+    driver: bridge
+
+# How to use:
+# 1. Create a .env file with: GROQ_API_KEY=your_key
+# 2. Run: docker-compose up
+# 3. Access API at: http://localhost:8000
+# 4. Access API docs at: http://localhost:8000/docs
+# 5. Stop: docker-compose down

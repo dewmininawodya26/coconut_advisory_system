@@ -1,1 +1,16 @@
+# Python
+venv/
+__pycache__/
+*.pyc
+
+# React Native / Expo
+node_modules/
+.expo/
+dist/
+build/
+
+# VS Code
+.vscode/
+
+# Environment
 .env
