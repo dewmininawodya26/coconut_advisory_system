@@ -8,6 +8,8 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel, ConfigDict
 from typing import List, Optional
 from contextlib import asynccontextmanager
+from fastapi.staticfiles import StaticFiles
+from fastapi.responses import FileResponse
 import os
 from dotenv import load_dotenv
 import logging
@@ -45,7 +47,7 @@ async def lifespan(app: FastAPI):
 
 # Initialize FastAPI app
 app = FastAPI(
-    title="Coconut Advisory API",
+    title="CocoAdvisor API",
     description="RAG-based advisory system for coconut farming in Sri Lanka",
     version="1.0.0",
     lifespan=lifespan
@@ -60,7 +62,23 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# ============ Request/Response Models ============
+# Mount static files
+static_dir = os.path.join(os.path.dirname(os.path.dirname(__file__)), "static")
+if os.path.exists(static_dir):
+    app.mount("/static", StaticFiles(directory=static_dir), name="static")
+
+@app.get("/", tags=["Health"])
+async def root():
+    """Serve the web interface"""
+    index_file = os.path.join(static_dir, "index.html")
+    if os.path.exists(index_file):
+        return FileResponse(index_file)
+    return {
+        "status": "running",
+        "service": "Coconut Advisory System",
+        "version": "1.0.0",
+        "message": "Web interface not found at /static/index.html"
+    }
 
 class QuestionRequest(BaseModel):
     model_config = ConfigDict(
