@@ -152,7 +152,7 @@ export default function CompareScreen() {
               <View style={[styles.card, styles.ragCard]}>
                 <View style={[styles.cardHeader, styles.ragHeader]}>
                   <Ionicons name="checkmark-circle-outline" size={20} color="#1B5E20" />
-                  <Text style={styles.ragHeaderText}>CocoAdvisor (Verified)</Text>
+                  <Text style={styles.ragHeaderText}>CocoCastAI (Verified)</Text>
                 </View>
                 <View style={styles.cardBody}>
                   <Text style={styles.answerText}>{result.rag_system.answer}</Text>

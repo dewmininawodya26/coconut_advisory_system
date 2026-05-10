@@ -1,6 +1,6 @@
 # Frontend React Native App
 
-React Native mobile application for Coconut Advisory System.
+React Native mobile application for CocoCastAI.
 
 ## Setup
 

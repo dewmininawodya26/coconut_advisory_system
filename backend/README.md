@@ -1,6 +1,6 @@
 # Backend - FastAPI Server
 
-FastAPI backend service for the Coconut Advisory System, providing REST API endpoints for mobile and web clients.
+FastAPI backend service for CocoCastAI, providing REST API endpoints for mobile and web clients.
 
 ## Setup
 
@@ -113,7 +113,7 @@ GET /info
 
 Response:
 {
-  "service": "Coconut Advisory System",
+  "service": "CocoCastAI",
   "version": "1.0.0",
   "description": "RAG-based advisory...",
   "endpoints": {

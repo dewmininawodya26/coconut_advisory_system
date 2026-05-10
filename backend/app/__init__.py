@@ -1,1 +1,1 @@
-"""Coconut Advisory System Backend Package"""
+"""CocoCastAI Backend Package"""

@@ -1,4 +1,4 @@
-# Coconut Advisory System - Mobile App
+# CocoCastAI - Mobile App
 
 A complete mobile application for coconut farming advisory using **React Native** frontend and **FastAPI** backend with RAG (Retrieval-Augmented Generation).
 

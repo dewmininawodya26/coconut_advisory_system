@@ -37,7 +37,7 @@ export default function AdvisoryChatScreen() {
   const [messages, setMessages] = useState<Message[]>([
     {
       id: '1',
-      text: ' I am CocoAdvisor, Ask Hello!me anything about coconut farming. How can I help you today?',
+      text: 'Hello! I am CocoCastAI, your AI Agricultural Expert. Ask me anything about coconut farming. How can I help you today?',
       sender: 'ai',
     },
   ]);
@@ -177,7 +177,7 @@ export default function AdvisoryChatScreen() {
           contentFit="contain"
         />
         <ActivityIndicator size="large" color="#2E7D32" style={styles.loadingIndicator} />
-        <Text style={styles.loadingText}>Initializing CocoSphere AI...</Text>
+        <Text style={styles.loadingText}>Initializing CocoCastAI...</Text>
       </View>
     );
   }
@@ -188,7 +188,7 @@ export default function AdvisoryChatScreen() {
       <View style={styles.header}>
         <View style={styles.headerTitleContainer}>
           <Ionicons name="leaf-outline" size={28} color="#FFFFFF" style={styles.headerIcon} />
-          <Text style={styles.headerTitle}>CocoAdvisor</Text>
+          <Text style={styles.headerTitle}>CocoCastAI</Text>
         </View>
         <Text style={styles.headerSubtitle}>Your Agricultural Expert</Text>
       </View>

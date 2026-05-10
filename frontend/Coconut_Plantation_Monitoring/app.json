@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "Coconut_Plantation_Monitoring",
-    "slug": "Coconut_Plantation_Monitoring",
+    "name": "CocoCastAI",
+    "slug": "cococastai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",

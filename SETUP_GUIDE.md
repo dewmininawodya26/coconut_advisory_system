@@ -1,6 +1,6 @@
 # Mobile App Setup Guide
 
-This guide will help you set up and run the Coconut Advisory System mobile app locally.
+This guide will help you set up and run the CocoCastAI mobile app locally.
 
 ## Prerequisites
 

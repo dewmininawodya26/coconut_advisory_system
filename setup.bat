@@ -1,7 +1,7 @@
 @echo off
-REM Quick Start Setup Script for Coconut Advisory System (Windows)
+REM Quick Start Setup Script for CocoCastAI (Windows)
 
-echo 🥥 Coconut Advisory System - Setup
+echo 🥥 CocoCastAI - Setup
 echo ====================================
 
 REM Check Python

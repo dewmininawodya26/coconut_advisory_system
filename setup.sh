@@ -1,7 +1,7 @@
 #!/bin/bash
-# Quick Start Setup Script for Coconut Advisory System
+# Quick Start Setup Script for CocoCastAI
 
-echo "🥥 Coconut Advisory System - Setup"
+echo "🥥 CocoCastAI - Setup"
 echo "===================================="
 
 # Colors for output
